@@ -1,0 +1,127 @@
+.progress-card {
+  box-shadow: 0px 0px 8px rgba(134, 134, 134, 0.1);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.progress-card:hover > .MuiBox-root > .MuiBox-root > .share {
+  display: block !important;
+}
+
+.progress-card-title {
+  color: #666666 !important;
+  margin-bottom: 10px;
+}
+
+.MuiLinearProgress-barColorPrimary {
+  background: #a0ec86 !important;
+}
+.MuiLinearProgress-colorPrimary {
+  background: #f4f3f3 !important;
+}
+.card-position {
+  color: #121212;
+  opacity: 0.1;
+  font-size: 40px;
+}
+
+.card-img {
+  width: 200px !important;
+  height: 200px !important;
+  align-self: center;
+}
+
+.share {
+  width: 15px;
+  display: none;
+}
+
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes customEnterOverlayAnimation {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes customLeaveOverlayAnimation {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+.bg-img {
+  margin-bottom: -7px;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+.customModal1 {
+  padding: 0px !important;
+  border-radius: 18px;
+}
+@media only screen and (max-width: 600px) {
+  .customModal1 {
+    display: none !important;
+  }
+  .customModal2 > .react-responsive-modal-modal {
+    width: 70% !important;
+    padding: 0px !important;
+  }
+  .modal2Overlay {
+    visibility: visible !important;
+  }
+}
+.customModal2 {
+  padding: 0px;
+  border-radius: 18px;
+}
+.customModal2 > .react-responsive-modal-modal {
+  margin-left: 20% !important;
+  margin-right: 20% !important;
+  box-shadow: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  padding-left: 50px;
+  position: fixed;
+}
+
+.modal2Overlay {
+  visibility: hidden !important;
+}
+
+@keyframes customEnterModalAnimation {
+  0% {
+    transform: scale(0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes customLeaveModalAnimation {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.2);
+  }
+}

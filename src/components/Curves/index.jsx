@@ -1,4 +1,5 @@
 import React from "react";
+
 import curves from "../../assets/images/waves.svg";
 
 const Curves = () => {

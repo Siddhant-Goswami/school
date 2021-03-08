@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans");
+
+.instructions {
+  font-family: "Public Sans";
+  font-weight: bold;
+  font-weight: 700;
+}
+
+.description {
+  font-family: "Public Sans";
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.question-num {
+  font-family: "Public Sans";
+  margin-top: 15px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.btn {
+  font-family: "Public Sans" !important;
+}
+
+.gradient-btn {
+  background: linear-gradient(270deg, #0022d3 0.07%, #6b82fb 100.05%);
+  color: white !important;
+  font-family: "Public Sans" !important;
+}
+
+.description-card {
+  border-radius: 18px !important;
+  box-shadow: 0px 9.01548px 40.5697px rgba(0, 0, 0, 0.16);
+  padding: 2rem !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .description-card {
+    max-width: 100% !important;
+  }
+}
