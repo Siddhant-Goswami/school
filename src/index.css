@@ -22,7 +22,7 @@ body {
   display: flex;
 }
 .mt-3 {
-  margin-top: 12px !important;
+  margin-top: 1.5em !important;
 }
 
 .align-items-center {

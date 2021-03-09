@@ -11,11 +11,12 @@ export default function RadioButtonsGroup({ value, setValue }) {
   };
 
   return (
-    <FormControl component="fieldset" style={{ marginTop: "1em" }}>
+    <FormControl component="fieldset" className="mt-3">
       <FormLabel component="legend">How did you hear about us ?</FormLabel>
       <RadioGroup
         aria-label="gender"
         name="gender1"
+        className="mt-3"
         value={value}
         onChange={handleChange}
       >

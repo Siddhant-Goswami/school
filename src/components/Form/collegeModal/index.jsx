@@ -6,18 +6,20 @@ import Button from "@material-ui/core/Button";
 
 import collegeIcon from "../../../assets/images/college.png";
 
-const CollegeModal = ({ open, setOpen, handleCollege }) => {
+const CollegeModal = ({ open, setOpen, setSelectedCollege }) => {
   const [college, setCollege] = React.useState("");
   const [city, setCity] = React.useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    handleCollege(college + " " + city);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSelectedCollege({
+      label: college,
+      value: college,
+    });
     setOpen(false);
-    console.log("college, city", college, city);
   };
-
   return (
+    <>
       <Modal
         classNames={{
           modal: "custom-modal",
@@ -78,6 +80,7 @@ const CollegeModal = ({ open, setOpen, handleCollege }) => {
           </Button>
         </form>
       </Modal>
+    </>
   );
 };
 export default CollegeModal;

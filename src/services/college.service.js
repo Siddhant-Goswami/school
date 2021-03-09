@@ -5,8 +5,8 @@ let api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-export const fetchCollegeListing = (queryString) => {
-  if (queryString) return api.get(`${COLLEGE_LIST}?q=${queryString}`);
-
-  return api.get(COLLEGE_LIST);
+export const fetchCollegeListing = (queryString, perPage, offset) => {
+  return api.get(
+    `${COLLEGE_LIST}?q=${queryString}&limit=${perPage}&offset=${offset}`
+  );
 };

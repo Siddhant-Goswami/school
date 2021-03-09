@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import debounce from "lodash.debounce";
+import CreatableSelect from "react-select/creatable";
 
 import { validateForm } from "../../utils";
 import RadioButtonsGroup from "../RadioButton";
@@ -12,43 +11,32 @@ import { fetchCollegeListing } from "../../services/college.service";
 import CollegeModal from "./collegeModal";
 import "./styles.css";
 
-
 function useDebounce(callback, delay) {
   const debouncedFn = useCallback(
     debounce((...args) => callback(...args), delay),
-    [] 
+    [] // will recreate if mounted
   );
   return debouncedFn;
 }
 
 function SignupForm({ title }) {
   const [name, setName] = useState("");
-  const [college, setCollege] = useState("Select");
+  const [college, setCollege] = useState("");
   const [collegeList, setCollegeList] = useState([]);
   const [email, setEmail] = useState("");
   const [date, setDate] = useState("2020-10-09");
   const [value, setValue] = useState("female");
-  const [showCollegeModal, setOpenCollegeModal] = React.useState(false);
+  const [openSecond, setOpenSecond] = React.useState(false);
+  const [collegeOffset, setCollegeOffset] = React.useState(0);
+  const [collegeCount, setCollegeCount] = React.useState(0);
+  const [selectedCollege, setSelectedCollege] = React.useState(null);
+  const resultsPerScroll = 10;
 
   let history = useHistory();
 
   useEffect(() => {
-    getAllColleges();
-  }, []);
-
-  const getAllColleges = () => {
-    fetchCollegeListing()
-      .then((response) => {
-        if (response.data && response.data.results.length !== 0)
-          setCollegeList([
-            ...response.data.results,
-            { slug: "cannot-find-college", name: "Cannot Find College" },
-          ]);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
+    getPaginatedColleges(0, "");
+  }, [collegeOffset]);
 
   const debouncedSave = useDebounce(
     (nextValue) => searchCollege(nextValue),
@@ -56,39 +44,21 @@ function SignupForm({ title }) {
   );
 
   const searchCollege = (query) => {
-    fetchCollegeListing(query)
-      .then((response) => {
-        if (response.data && response.data.results.length !== 0)
-          setCollegeList([...response.data.results]);
+    fetchCollegeListing(query, resultsPerScroll, 0)
+      .then((res) => {
+        setCollegeList(res.data.results);
       })
       .catch((err) => {
         console.log("err", err);
       });
   };
 
-  const handleCollegeChange = (input) => {
-    if (isNaN(input.target.value)) {
-      if (input.target.value === "Cannot Find College") {
-        setOpenCollegeModal(true);
-      } else {
-        setCollege(input.target.value);
-        debouncedSave(input.target.value);
-      }
-    } else {
-      if (input.target.innerText === "Cannot Find College") {
-        setOpenCollegeModal(true);
-      } else {
-        setCollege(input.target.innerText);
-      }
-    }
-  };
-
   const handleCollege = (input) => {
     setCollege(input);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const userDetails = {
       name,
       college,
@@ -96,27 +66,43 @@ function SignupForm({ title }) {
       date,
     };
     if (validateForm(userDetails)) {
-      localStorage.setItem("userDetails", JSON.stringify(userDetails));
       history.push("/");
-    } else alert("Error: Something went wrong!");
+      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+    } else alert("Error");
+  };
+
+  const collegeOptions = collegeList.map((college) => ({
+    label: college.name,
+    value: college.slug,
+  }));
+
+  const getPaginatedColleges = (offset = 0, query = "") => {
+    fetchCollegeListing(college, resultsPerScroll, collegeList.length)
+      .then((res) => {
+        setCollegeList([...res.data.results, ...collegeList]);
+        if (collegeCount === 0) setCollegeCount(res.data.count);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const handleCollegeChange = (input) => {
+    setCollege(input);
+    debouncedSave(input);
   };
 
   const renderForm = () => {
     return (
-      <form style={{ maxWidth: "400px" }} onSubmit={handleSubmit}>
-        <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
+      <form className="signup-form" onSubmit={handleSubmit}>
+        <div className="form-header">
           <h4>{title}</h4>
-        </Grid>
+        </div>
         <TextField
           required
           fullWidth
           color="primary"
-          style={{ marginTop: "1em" }}
+          className="mt-3"
           margin="dense"
           variant="outlined"
           type="text"
@@ -128,10 +114,10 @@ function SignupForm({ title }) {
           required
           fullWidth
           color="primary"
-          style={{ marginTop: "1em" }}
+          className="mt-3"
           margin="dense"
           variant="outlined"
-          type="text"
+          type="email"
           value={email}
           label="Email"
           onChange={(input) => setEmail(input.target.value)}
@@ -140,7 +126,7 @@ function SignupForm({ title }) {
           required
           fullWidth
           color="primary"
-          style={{ marginTop: "1em" }}
+          className="mt-3"
           margin="dense"
           variant="outlined"
           type="date"
@@ -148,25 +134,38 @@ function SignupForm({ title }) {
           label="Date of Birth"
           onChange={(input) => setDate(input.target.value)}
         />
-        <Autocomplete
-          id="college"
-          required
-          fullWidth
-          options={collegeList}
-          getOptionLabel={(option) => option.name}
-          style={{ marginTop: "1em" }}
-          onInputChange={(input) => handleCollegeChange(input)}
-          renderInput={(params) => (
-            <TextField {...params} label="College" variant="outlined" />
-          )}
+        <CreatableSelect
+          isClearable
+          className="mt-3"
+          value={selectedCollege}
+          menuPortalTarget={document.body}
+          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+          onMenuScrollToBottom={() => {
+            setCollegeOffset((collegeOffset) => collegeOffset + 10);
+          }}
+          onChange={(newVal) => {
+            if (newVal) {
+              setSelectedCollege(newVal);
+            } else {
+              setSelectedCollege(null);
+            }
+          }}
+          onCreateOption={() => {
+            setOpenSecond(true);
+          }}
+          onInputChange={handleCollegeChange}
+          options={collegeOptions}
+          value={selectedCollege}
         />
+
         <RadioButtonsGroup value={value} setValue={setValue} />
         <Button
           type="submit"
           fullWidth
           variant="contained"
           color="primary"
-          style={{ backgroundColor: "rgba(35, 118, 229, 1)", marginTop: "1em" }}
+          className="mt-3"
+          style={{ backgroundColor: "rgba(35, 118, 229, 1)", padding: "0.6em" }}
         >
           Sign up
         </Button>
@@ -175,20 +174,17 @@ function SignupForm({ title }) {
   };
 
   return (
-    <Grid
-    container
-    direction="column"
-    justify="center"
-    alignItems="center"
-  >
+    <div className="signup-box">
       <CollegeModal
-        open={showCollegeModal}
-        setOpen={setOpenCollegeModal}
+        open={openSecond}
+        setOpen={setOpenSecond}
         handleCollege={handleCollege}
+        setSelectedCollege={setSelectedCollege}
       />
       {renderForm()}
-    </Grid>
+    </div>
   );
 }
 
 export default SignupForm;
+
