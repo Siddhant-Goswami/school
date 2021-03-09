@@ -1,13 +1,15 @@
 import React from "react";
-import { toast } from "react-toastify";
-import { Modal } from "react-responsive-modal";
-import "react-responsive-modal/styles.css";
 import Box from "@material-ui/core/Box";
+import { toast } from "react-toastify";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { useHistory } from "react-router-dom";
+import { Menu, MenuItem } from "@szhsin/react-menu";
+import { Modal } from "react-responsive-modal";
 
 import shareButton from "../../assets/images/share.svg";
 import DetailsModal from "../DetailsModal";
+import "react-responsive-modal/styles.css";
+import "@szhsin/react-menu/dist/index.css";
 import "./styles.css";
 
 const CourseCard = React.forwardRef(({ card, position, pulsating }, ref) => {
@@ -16,27 +18,35 @@ const CourseCard = React.forwardRef(({ card, position, pulsating }, ref) => {
 
   const [openFirst, setOpenFirst] = React.useState(false);
   const [openSecond, setOpenSecond] = React.useState(false);
+  const [hasIntentShare, setIntentShare] = React.useState(false);
 
   if (window.location && window.location.search) {
     params = new URLSearchParams(window.location.search);
   }
 
+  const isLoggedIn = () => {
+    return localStorage.getItem("userDetails");
+  };
+
   const handleCardClick = () => {
-    if (!localStorage.getItem("userDetails")) {
+    if (!isLoggedIn()) {
       toast.error("Sign up required!");
     } else {
-      setOpenFirst(true);
-      setOpenSecond(true);
+      if (!hasIntentShare) {
+        setOpenFirst(true);
+        setOpenSecond(true);
+      }
     }
   };
 
   const handleShareClick = (event) => {
-    event.stopPropagation();
-    params.set("card_slug", card.slug);
-    history.push({
-      pathname: window.location.pathname,
-      search: params.toString(),
-    });
+    if (isLoggedIn()) {
+      params.set("card_slug", card.slug);
+      history.push({
+        pathname: window.location.pathname,
+        search: params.toString(),
+      });
+    }
   };
 
   const handleClose = () => {
@@ -72,18 +82,36 @@ const CourseCard = React.forwardRef(({ card, position, pulsating }, ref) => {
         className={`progress-card cursor-pointer ${
           ref !== null && pulsating && "pulse"
         }`}
-        onClick={handleCardClick}
+        onClick={() => {
+          setIntentShare(false);
+          handleCardClick();
+        }}
         ref={ref}
       >
         <Box display="flex" flexDirection="column">
-          <Box display="flex" justifyContent="space-between">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <div className="progress-card-title">{card.title}</div>
-            <img
-              src={shareButton}
-              alt="share"
-              className="share"
-              onClick={handleShareClick}
-            ></img>
+
+            <Menu
+              direction="left"
+              menuButton={
+                <img
+                  src={shareButton}
+                  alt="share"
+                  className="share"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setIntentShare(true);
+                  }}
+                ></img>
+              }
+            >
+              <MenuItem onClick={handleShareClick}>Share</MenuItem>
+            </Menu>
           </Box>
           <LinearProgress
             variant="determinate"

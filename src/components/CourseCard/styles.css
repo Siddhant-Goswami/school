@@ -36,6 +36,8 @@
 .share {
   width: 15px;
   display: none;
+  align-self: flex-start;
+  margin-top: 5px;
 }
 
 .pulse {

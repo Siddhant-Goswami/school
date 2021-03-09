@@ -1,13 +1,19 @@
 import React from "react";
 
+import "./styles.css";
 import curves from "../../assets/images/waves.svg";
 import footerCurves from "../../assets/images/footer-waves.svg";
 
+const Curves = ({ footer }) => {
+  if (footer)
+    return (
+      <img
+        src={footerCurves}
+        alt="curves"
+        className="mw-100 h-100 footer-curves"
+      />
+    );
 
-const Curves = ({footer}) => {
-  if(footer) 
-    return <img src={footerCurves} alt="curves" className="mw-100" />;
-    
   return <img src={curves} alt="curves" className="mw-100" />;
 };
 
