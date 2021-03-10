@@ -1,6 +1,7 @@
 # Newton school
 ___
 
+*Use CORS extension to get response from api calls.
 
 ### Table of Contents
 
