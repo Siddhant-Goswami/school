@@ -18,12 +18,12 @@ The project has been setup based off [RN Getting Started](https://facebook.githu
 ├── ios						iOS Native Code
 ├── src
 │   ├── assets					    Images, logos
-│   ├── constants				    api constants, Months
+│   ├── constants				    api constants
 │   ├── components					UI compoments
-│   ├── containers					Screens
-│   ├── navigation				    Router, Navigation
+│   ├── containers					pages
+│   ├── routes				    Router, Navigation
 │   ├── services					API calls
-│   └── shared                      Async Storage API
+│   └── utils              utils validation
 ├── .gitignore
 ├── app.json
 ├── index.js	                    Loads App.js
