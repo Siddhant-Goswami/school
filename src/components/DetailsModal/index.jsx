@@ -9,31 +9,10 @@ import {
   Grid,
 } from "@material-ui/core";
 
-import { fetchCourseCardDetails } from "../../services/course.service";
 import "./styles.css";
 
-const DetailsModal = ({ open, handleClose }) => {
-  const [cardDetailsLoading, setCardDetailsLoading] = React.useState(true);
-  const [cardDetailsError, setCardDetailsError] = React.useState(false);
-  const [cardDetails, setCardDetails] = React.useState({});
-
-  useEffect(() => {
-    fetchCardDetails();
-  }, []);
-
-  const fetchCardDetails = () => {
-    fetchCourseCardDetails()
-      .then((response) => {
-        setCardDetailsLoading(false);
-        setCardDetailsError(false);
-        setCardDetails(response.data);
-      })
-      .catch((error) => {
-        setCardDetailsLoading(false);
-        setCardDetailsError(true);
-      });
-  };
-
+const DetailsModal = ({ open, handleClose, cardDetailsLoading, cardDetailsError,cardDetails }) => {
+  
   return (
     <Modal
       open={open}

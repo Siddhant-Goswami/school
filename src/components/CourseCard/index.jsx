@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Box from "@material-ui/core/Box";
 import { toast } from "react-toastify";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -7,6 +7,7 @@ import { Menu, MenuItem } from "@szhsin/react-menu";
 import { Modal } from "react-responsive-modal";
 
 import shareButton from "../../assets/images/share.svg";
+import { fetchCourseCardDetails } from "../../services/course.service";
 import DetailsModal from "../DetailsModal";
 import "react-responsive-modal/styles.css";
 import "@szhsin/react-menu/dist/index.css";
@@ -19,10 +20,30 @@ const CourseCard = React.forwardRef(({ card, position, pulsating }, ref) => {
   const [openFirst, setOpenFirst] = React.useState(false);
   const [openSecond, setOpenSecond] = React.useState(false);
   const [hasIntentShare, setIntentShare] = React.useState(false);
+  const [cardDetailsLoading, setCardDetailsLoading] = React.useState(true);
+  const [cardDetailsError, setCardDetailsError] = React.useState(false);
+  const [cardDetails, setCardDetails] = React.useState({});
 
   if (window.location && window.location.search) {
     params = new URLSearchParams(window.location.search);
   }
+
+  useEffect(() => {
+    fetchCardDetails();
+  }, [])
+
+  const fetchCardDetails = () => {
+    fetchCourseCardDetails(card.slug)
+      .then((response) => {
+        setCardDetailsLoading(false);
+        setCardDetailsError(false);
+        setCardDetails(response.data);
+      })
+      .catch((error) => {
+        setCardDetailsLoading(false);
+        setCardDetailsError(true);
+      });
+  };
 
   const isLoggedIn = () => {
     return localStorage.getItem("userDetails");
@@ -35,6 +56,7 @@ const CourseCard = React.forwardRef(({ card, position, pulsating }, ref) => {
       if (!hasIntentShare) {
         setOpenFirst(true);
         setOpenSecond(true);
+        fetchCardDetails()
       }
     }
   };
@@ -76,7 +98,7 @@ const CourseCard = React.forwardRef(({ card, position, pulsating }, ref) => {
           className="bg-img"
         ></img>
       </Modal>
-      <DetailsModal open={openSecond} handleClose={handleClose} />
+      <DetailsModal cardDetails={cardDetails} cardDetailsError={cardDetailsError} cardDetailsLoading={cardDetailsLoading} open={openSecond} handleClose={handleClose} />
 
       <div
         className={`progress-card cursor-pointer ${

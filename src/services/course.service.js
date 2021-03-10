@@ -16,9 +16,9 @@ export const fetchCourseListing = (hash) => {
   return api.get(`${COURSE_DETAILS}`);
 };
 
-export const fetchCourseCardDetails = (hash) => {
-  if (hash) {
-    return api.get(`${CARD_DETAILS}?card_hash${hash}`);
+export const fetchCourseCardDetails = (slug) => {
+  if (slug) {
+    return api.get(`${CARD_DETAILS}?card_slug${slug}`);
   }
   return api.get(`${CARD_DETAILS}`);
 };

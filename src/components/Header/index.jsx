@@ -21,7 +21,9 @@ const Header = () => {
   return (
     <nav>
       <Box className="app-header">
+      <a href="/">
         <img src={appLogo} alt="Brand"></img>
+        </a>
         <a href="/signup" onClick={handleAuthentication}>
           {isLoggedIn ? "Logout" : " Signup"}
         </a>
