@@ -1,8 +1,6 @@
 # Newton school
 ___
 
-The project has been setup based off [RN Getting Started](https://facebook.github.io/react-native/docs/getting-started).
-
 
 ### Table of Contents
 
