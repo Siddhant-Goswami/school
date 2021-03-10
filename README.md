@@ -14,8 +14,7 @@ The project has been setup based off [RN Getting Started](https://facebook.githu
 
 ```
 /
-├── android					Android Native code
-├── ios						iOS Native Code
+├── public        
 ├── src
 │   ├── assets					    Images, logos
 │   ├── constants				    api constants
@@ -23,11 +22,11 @@ The project has been setup based off [RN Getting Started](https://facebook.githu
 │   ├── containers					pages
 │   ├── routes				    Router, Navigation
 │   ├── services					API calls
-│   └── utils              utils validation
-├── .gitignore
-├── app.json
-├── index.js	                    Loads App.js
-├── App.js					        Application Entry point
+|   ├── index.js	        Loads App.js
+|   ├── App.js		         Application Entry point
+│   └── utils              utils, validation
+|    
+├── .gitignore			       
 ├── package.json
 └── README.md
 ```
