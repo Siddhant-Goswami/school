@@ -9,7 +9,7 @@ import {
   Grid,
 } from "@material-ui/core";
 
-import { fetchCourseListing } from "../../services/course.service";
+import { fetchCourseCardDetails } from "../../services/course.service";
 import "./styles.css";
 
 const DetailsModal = ({ open, handleClose }) => {
@@ -22,8 +22,7 @@ const DetailsModal = ({ open, handleClose }) => {
   }, []);
 
   const fetchCardDetails = () => {
-    const cardHash = "find-the-shell";
-    fetchCourseListing(cardHash)
+    fetchCourseCardDetails()
       .then((response) => {
         setCardDetailsLoading(false);
         setCardDetailsError(false);
