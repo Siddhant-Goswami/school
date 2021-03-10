@@ -1,10 +1,45 @@
-# Getting Started with Create React App
+# Newton school
+___
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The project has been setup based off [RN Getting Started](https://facebook.github.io/react-native/docs/getting-started).
 
-## Available Scripts
+
+### Table of Contents
+
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+
+
+### Project Structure
+
+```
+/
+├── android					Android Native code
+├── ios						iOS Native Code
+├── src
+│   ├── assets					    Images, logos
+│   ├── constants				    api constants, Months
+│   ├── components					UI compoments
+│   ├── containers					Screens
+│   ├── navigation				    Router, Navigation
+│   ├── services					API calls
+│   └── shared                      Async Storage API
+├── .gitignore
+├── app.json
+├── index.js	                    Loads App.js
+├── App.js					        Application Entry point
+├── package.json
+└── README.md
+```
+
+`src`
+Presentation layer for the app - screens, styles, images, icons etc.
+
+### Getting Started
 
 In the project directory, you can run:
+
+Make sure node version installed is `>=10.x.x`. :
 
 ### `yarn start`
 
